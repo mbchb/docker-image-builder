@@ -1,0 +1,25 @@
+stages:
+  - 🐳 docker
+
+docker:build:tag:push:
+  stage: 🐳 docker
+  #Usage du docker-in-docker
+  image: docker:20.10.16 
+  services:
+    - name: docker:20.10.16-dind
+      pull_policy: always
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+    IMAGE_NAME: debian #changer avec un nom souhaité
+    IMAGE_TAG: latest #changer avec un tag souhaité
+  script:
+    #Build & push de l'image dans mon Dockerhub :
+    - docker build --tag $USER_DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG .
+    - docker login -u $USER_DOCKER_REGISTRY -p $PASSWORD_DOCKER_REGISTRY $DOCKER_REGISTRY_URL
+    - docker push $USER_DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+
+    #Build & push de l'image dans GitLab Container Registry :
+    - docker tag $USER_DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG registry.gitlab.com/rouka/docker-image-builder/$IMAGE_NAME:$IMAGE_TAG
+    - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN registry.gitlab.com
+    - docker push registry.gitlab.com/rouka/docker-image-builder/$IMAGE_NAME:$IMAGE_TAG
