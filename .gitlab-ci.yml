@@ -20,6 +20,6 @@ docker:build:tag:push:
     - docker push $USER_DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
 
     #Build & push de l'image dans GitLab Container Registry :
-    - docker tag $USER_DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG registry.gitlab.com/rouka/docker-image-builder/$IMAGE_NAME:$IMAGE_TAG
+    - docker tag $USER_DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG registry.gitlab.com/roukachebbi/docker-image-builder/$IMAGE_NAME:$IMAGE_TAG
     - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN registry.gitlab.com
-    - docker push registry.gitlab.com/rouka/docker-image-builder/$IMAGE_NAME:$IMAGE_TAG
+    - docker push registry.gitlab.com/roukachebbi/docker-image-builder/$IMAGE_NAME:$IMAGE_TAG
